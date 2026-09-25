@@ -47,22 +47,22 @@ plt.figure(figsize=(10, 7))
 
 # Plot the PCA-compressed data, colored by their K-Means cluster assignment
 sns.scatterplot(
-    x=X_pca[:, 0], 
-    y=X_pca[:, 1], 
-    hue=cluster_labels, 
-    palette='viridis', 
-    alpha=0.7, 
+    x=X_pca[:, 0],
+    y=X_pca[:, 1],
+    hue=cluster_labels,
+    palette='viridis',
+    alpha=0.7,
     edgecolor='k',
     legend='full'
 )
 
 # Overlay the cluster centroids
 plt.scatter(
-    centroids[:, 0], 
-    centroids[:, 1], 
-    c='red', 
-    s=250, 
-    marker='X', 
+    centroids[:, 0],
+    centroids[:, 1],
+    c='red',
+    s=250,
+    marker='X',
     label='Centroids'
 )
 
