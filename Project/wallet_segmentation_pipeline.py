@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -64,34 +63,45 @@ print(f"Silhouette Score: {sil_score:.3f}")
 print("(Scale: -1.0 to 1.0. Higher is better, indicating dense and well-separated clusters.)\n")
 
 # -----------------------------------------------------------------------------
-# 6. VISUALIZATION & EXPORT DASHBOARD
+# 6. VISUALIZATION & EXPORT DASHBOARD (Black & Red Theme)
 # -----------------------------------------------------------------------------
-os.makedirs('outputs', exist_ok=True)
-
+# Enforce black background for the entire figure and axes
+plt.style.use('dark_background')
 plt.figure(figsize=(10, 7))
-sns.set_theme(style="darkgrid")
 
+# Custom red gradient palette for the 3 clusters (Light Red, Solid Red, Dark Red)
+red_palette = ['#ff9999', '#ff0000', '#8b0000']
+
+# Scatter plot of PCA data colored by K-Means cluster
 sns.scatterplot(
     x=df_pca[:, 0], y=df_pca[:, 1], 
-    hue=df['cluster'], palette='deep', alpha=0.8, s=60, edgecolor='k'
+    hue=df['cluster'], palette=red_palette, alpha=0.9, s=60, edgecolor='black'
 )
 
+# Overlay calculated centroids in white for maximum contrast
 plt.scatter(
     centroids[:, 0], centroids[:, 1], 
-    c='red', s=300, marker='X', linewidths=2, edgecolors='black', label='Centroids'
+    c='white', s=300, marker='X', linewidths=2, edgecolors='black', label='Centroids'
 )
 
-plt.title('Digital Wallet User Segmentation (PCA + K-Means)', fontsize=16, pad=15)
-plt.xlabel('Principal Component 1 (Transaction Volume & Value)')
-plt.ylabel('Principal Component 2 (App Activity & Bill Payments)')
-plt.legend(title='Discovered Persona')
+plt.title('Digital Wallet User Segmentation (PCA + K-Means)', fontsize=16, pad=15, color='white')
+plt.xlabel('Principal Component 1 (Transaction Volume & Value)', color='lightgrey')
+plt.ylabel('Principal Component 2 (App Activity & Bill Payments)', color='lightgrey')
+
+# Format the legend to match the dark theme
+legend = plt.legend(title='Discovered Persona', facecolor='black', edgecolor='white')
+plt.setp(legend.get_texts(), color='white')
+plt.setp(legend.get_title(), color='white')
+
 plt.tight_layout()
 
+# Export high-resolution PNG with a transparent/black background
 export_path = 'wallet_segmentation_clusters.png'
-plt.savefig(export_path, dpi=300, bbox_inches='tight')
+plt.savefig(export_path, dpi=300, bbox_inches='tight', facecolor='black')
 print(f"Visualization successfully saved to: {export_path}\n")
 
 plt.show()
 
+# Print average stats for business interpretation
 print("=== Cluster Archetypes (Average Values) ===")
 print(df.groupby('cluster').mean().round(2))
